@@ -15,7 +15,7 @@ import java.util.List;
  * Date: 2018/7/11 下午10:07
  * Description:
  */
-public abstract class BaseHeaderAdapter<T extends MultiItemEntity> extends BaseMultiItemQuickAdapter<T, BaseViewHolder> implements PinnedHeaderNotifyer<T>{
+public abstract class BaseHeaderAdapter<T extends MultiItemEntity> extends BaseMultiItemQuickAdapter<T, BaseViewHolder> {
     public static final int TYPE_HEADER = 1;
     public static final int TYPE_DATA = 2;
     /**

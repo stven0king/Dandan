@@ -1,6 +1,7 @@
 package com.dandan.love.base;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import rx.Subscription;
@@ -12,7 +13,15 @@ import rx.subscriptions.CompositeSubscription;
  * Description:
  */
 public class BaseActivity extends AppCompatActivity {
+    protected static String TAG;
     private CompositeSubscription mCompositeSubscription;
+
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TAG = this.getClass().getSimpleName();
+    }
 
     public CompositeSubscription getCompositeSubscription() {
         if (this.mCompositeSubscription == null) {

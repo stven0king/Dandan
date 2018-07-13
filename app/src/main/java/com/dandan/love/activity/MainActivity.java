@@ -6,6 +6,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +22,17 @@ import com.dandan.love.App;
 import com.dandan.love.R;
 import com.dandan.love.base.BaseActivity;
 import com.dandan.love.base.BaseHeaderAdapter;
+import com.dandan.love.bean.BaiDuImageModel;
 import com.dandan.love.bean.GankIOClassifyModel;
 import com.dandan.love.bean.PinnedHeaderEntity;
+import com.dandan.love.common.network.task.BaiduImageGetListTask;
 import com.dandan.love.common.network.task.GankDataGetListTask;
 import com.dandan.love.listener.OnHeaderClickListener;
 import com.dandan.love.utils.DensityUtil;
 import com.dandan.love.utils.Utils;
 import com.dandan.love.view.viewholder.decoration.PinnedHeaderItemDecoration;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +46,7 @@ import rx.Subscription;
  * Description:
  */
 public class MainActivity extends BaseActivity {
+
     private RecyclerView mRecyclerView;
 
     private BaseHeaderAdapter<PinnedHeaderEntity<String>> mAdapter;
@@ -55,26 +62,26 @@ public class MainActivity extends BaseActivity {
         mAdapter = new BaseHeaderAdapter<PinnedHeaderEntity<String>>(data) {
             @Override
             protected void addItemTypes() {
-                addItemType(BaseHeaderAdapter.TYPE_HEADER, R.layout.item_pinned_header);
+                //addItemType(BaseHeaderAdapter.TYPE_HEADER, R.layout.item_pinned_header);
                 addItemType(BaseHeaderAdapter.TYPE_DATA, R.layout.item_data);
             }
 
             @Override
             protected void convert(BaseViewHolder holder, PinnedHeaderEntity<String> item) {
                 switch (holder.getItemViewType()) {
-                    case BaseHeaderAdapter.TYPE_HEADER:
-                        holder.setText(R.id.tv_animal, item.getPinnedHeaderName());
-                        holder.setOnClickListener(R.id.tv_animal, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
-                        break;
+                    //case BaseHeaderAdapter.TYPE_HEADER:
+                    //    holder.setText(R.id.tv_animal, item.getPinnedHeaderName());
+                    //    holder.setOnClickListener(R.id.tv_animal, new View.OnClickListener() {
+                    //        @Override
+                    //        public void onClick(View v) {
+                    //
+                    //        }
+                    //    });
+                    //    break;
                     case BaseHeaderAdapter.TYPE_DATA:
 
                         int position = holder.getLayoutPosition();
-                        holder.setText(R.id.tv_pos, position + "");
+                        holder.setText(R.id.tv_pos, item.getPinnedHeaderName());
                         ImageView imageView = holder.getView(R.id.iv_animal);
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) imageView.getLayoutParams();
                         params.width = (mDisplayWidth - 100) / 2;
@@ -83,17 +90,6 @@ public class MainActivity extends BaseActivity {
                         Glide.with(MainActivity.this).load(item.getData()).into(imageView);
                         break;
                 }
-            }
-
-            @Override
-            public boolean isPinnedHeaderType(int viewType) {
-                //return viewType == BaseHeaderAdapter.TYPE_HEADER;
-                return false;
-            }
-
-            @Override
-            public PinnedHeaderEntity<String> getPinnedHeaderInfo(int position) {
-                return (PinnedHeaderEntity<String>) getData().get(position);
             }
         };
 
@@ -117,24 +113,8 @@ public class MainActivity extends BaseActivity {
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL));
         //mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
-        OnHeaderClickListener<PinnedHeaderEntity<Integer>> headerClickListener = new OnHeaderClickListener<PinnedHeaderEntity<Integer>>() {
-            @Override
-            public void onHeaderClick(int id, int position, PinnedHeaderEntity<Integer> data) {
-                Toast.makeText(MainActivity.this, "click, tag: " + data.getPinnedHeaderName(), Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onHeaderLongClick(int id, int position, PinnedHeaderEntity<Integer> data) {
-                Toast.makeText(MainActivity.this, "long click, tag: " + data.getPinnedHeaderName(), Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onHeaderDoubleClick(int id, int position, PinnedHeaderEntity<Integer> data) {
-                Toast.makeText(MainActivity.this, "double click, tag: " + data.getPinnedHeaderName(), Toast.LENGTH_SHORT).show();
-            }
-        };
-        //mRecyclerView.addItemDecoration(new PinnedHeaderItemDecoration.Builder<PinnedHeaderEntity<Integer>>().setDividerId(R.drawable.divider).enableDivider(true)
-        //        .setHeaderClickListener(headerClickListener).create());
         mRecyclerView.setAdapter(mAdapter);
         initdata();
     }
@@ -165,6 +145,35 @@ public class MainActivity extends BaseActivity {
                     }
                 });
         addSubscription(s);
+        Subscription s1 = new BaiduImageGetListTask(0, "丝袜美腿高清")
+                .exeForObservable()
+                .subscribe(new Subscriber<ArrayList<BaiDuImageModel>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<BaiDuImageModel> list) {
+                        if (null != list && list.size() > 0) {
+                            for (BaiDuImageModel tmp:list) {
+                                String url = !TextUtils.isEmpty(tmp.getHoverURL()) ?
+                                        tmp.getHoverURL() : !TextUtils.isEmpty(tmp.getMiddleURL()) ?
+                                        tmp.getMiddleURL() : !TextUtils.isEmpty(tmp.getThumbURL()) ?
+                                        tmp.getThumbURL() : tmp.getLargeTnImageUrl();
+                                data.add(new PinnedHeaderEntity<String>(url, BaseHeaderAdapter.TYPE_DATA, tmp.getFromPageTitleEnc()));
+
+                            }
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+        addSubscription(s1);
     }
 
 }
