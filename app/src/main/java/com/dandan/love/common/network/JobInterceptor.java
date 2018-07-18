@@ -1,13 +1,8 @@
 package com.dandan.love.common.network;
 
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.dandan.love.App;
-
 import java.io.IOException;
-import java.net.InetAddress;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,10 +1,15 @@
 package com.dandan.love.utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.nfc.Tag;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.dandan.love.App;
+import com.dandan.love.common.logger.core.Logger;
 
 /**
  * Created by Tanzhenxing
@@ -22,11 +27,21 @@ public class AndroidUtils {
             } else {
                 cachePath = App.getApp().getCacheDir().getPath();
             }
-            Log.d(TAG, cachePath + "\n" + App.getApp().getExternalCacheDir().getPath() + "\n" + App.getApp().getCacheDir()
+            Logger.d(TAG, cachePath + "\n" + App.getApp().getExternalCacheDir().getPath() + "\n" + App.getApp().getCacheDir()
                     .getPath());
         }catch (Exception e){
 
         }
         return cachePath;
+    }
+
+    private void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            View focusView = activity.getCurrentFocus();
+            if (focusView != null) {
+                imm.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
+            }
+        }
     }
 }

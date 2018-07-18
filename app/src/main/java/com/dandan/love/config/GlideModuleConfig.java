@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.load.engine.cache.ExternalCacheDiskCacheFactory;
+import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 import com.bumptech.glide.load.engine.cache.LruResourceCache;
 import com.bumptech.glide.module.AppGlideModule;
 
@@ -26,6 +26,6 @@ public class GlideModuleConfig extends AppGlideModule {
         builder.setMemoryCache(new LruResourceCache(memoryCacheSizeBytes));
         int diskCacheSizeBytes = 1024 * 1024 * 100;  //100 MB
         builder.setDiskCache(
-                new ExternalCacheDiskCacheFactory(context, FileConfig.GLIDE_IMAGE_CACHE, diskCacheSizeBytes));
+                new InternalCacheDiskCacheFactory(context, FileConfig.GLIDE_IMAGE_CACHE, diskCacheSizeBytes));
     }
 }

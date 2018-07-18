@@ -3,6 +3,7 @@ package com.dandan.love.common.network;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.converter.ByteArrayConverterFactory;
 import com.dandan.love.common.network.converter.Host;
 import com.dandan.love.common.network.converter.JSONObjectResponseConverterFactory;
@@ -84,7 +85,7 @@ public class RetrofitApiFactory {
     }
 
     public static void initOkHttpClient(){
-        Log.d("RetrofitApiFactory","--initOkHttpClient--") ;
+        Logger.d("RetrofitApiFactory","--initOkHttpClient--") ;
         okHttpClient =
                 new OkHttpClient.Builder()
                         .cache(cache)

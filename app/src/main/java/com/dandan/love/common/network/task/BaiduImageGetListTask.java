@@ -3,7 +3,7 @@ package com.dandan.love.common.network.task;
 import android.util.Log;
 
 import com.dandan.love.bean.BaiDuImageModel;
-import com.dandan.love.bean.GankIOClassifyModel;
+import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.RequestParams;
 import com.dandan.love.common.network.RetrofitTask;
 import com.dandan.love.config.RetrofitInterfaceConfig;
@@ -55,7 +55,6 @@ public class BaiduImageGetListTask extends RetrofitTask<ArrayList<BaiDuImageMode
     private Func1<JSONObject, ArrayList<BaiDuImageModel>> parase = new Func1<JSONObject, ArrayList<BaiDuImageModel>>() {
         @Override
         public ArrayList<BaiDuImageModel> call(JSONObject jsonObject) {
-            Log.d(TAG, jsonObject.toString());
             ArrayList<BaiDuImageModel> result = null;
             try {
                 if (null != jsonObject && jsonObject.has("data")) {

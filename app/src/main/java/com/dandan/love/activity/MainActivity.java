@@ -1,21 +1,14 @@
 package com.dandan.love.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.SparseIntArray;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dandan.love.App;
@@ -25,14 +18,12 @@ import com.dandan.love.base.BaseHeaderAdapter;
 import com.dandan.love.bean.BaiDuImageModel;
 import com.dandan.love.bean.GankIOClassifyModel;
 import com.dandan.love.bean.PinnedHeaderEntity;
+import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.BaiduImageGetListTask;
 import com.dandan.love.common.network.task.GankDataGetListTask;
-import com.dandan.love.listener.OnHeaderClickListener;
+import com.dandan.love.config.GlideApp;
+import com.dandan.love.fragment.ImagePreviewFragment;
 import com.dandan.love.utils.DensityUtil;
-import com.dandan.love.utils.Utils;
-import com.dandan.love.view.viewholder.decoration.PinnedHeaderItemDecoration;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +78,7 @@ public class MainActivity extends BaseActivity {
                         params.width = (mDisplayWidth - 100) / 2;
                         params.height = (position % 3 == 0) ? 500 : 660;
                         imageView.setLayoutParams(params);
-                        Glide.with(MainActivity.this).load(item.getData()).into(imageView);
+                        GlideApp.with(MainActivity.this).load(item.getData()).into(imageView);
                         break;
                 }
             }
@@ -97,7 +88,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int i) {
                 final PinnedHeaderEntity<String> entity = (PinnedHeaderEntity<String>) mAdapter.getData().get(i);
-                Toast.makeText(MainActivity.this, entity.getPinnedHeaderName() + ", position " + i + ", id " + entity.getData(), Toast.LENGTH_SHORT).show();
+                new ImagePreviewFragment(MainActivity.this.getSupportFragmentManager()).open().show(entity.getData());
             }
         });
 
@@ -147,17 +138,7 @@ public class MainActivity extends BaseActivity {
         addSubscription(s);
         Subscription s1 = new BaiduImageGetListTask(0, "丝袜美腿高清")
                 .exeForObservable()
-                .subscribe(new Subscriber<ArrayList<BaiDuImageModel>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
+                .subscribe(new SimpleSubscriber<ArrayList<BaiDuImageModel>>() {
                     @Override
                     public void onNext(ArrayList<BaiDuImageModel> list) {
                         if (null != list && list.size() > 0) {
