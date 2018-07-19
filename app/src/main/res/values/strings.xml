@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">~!猪猪</string>
+
+    <string name="tab_light_house">灯塔</string>
+    <string name="tab_work">工作</string>
+    <string name="tab_find">寻找</string>
 </resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!--<include layout="@layout/fragment_find_main_layout"/>-->
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/main_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/main_navigation"
+        android:background="?android:attr/windowBackground"
+        app:itemIconTint="@drawable/bottom_nav_icon_color"
+        app:itemTextColor="@drawable/bottom_nav_icon_color"
+        app:itemBackground="@drawable/tab_item_background"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <!--<fragment-->
+        <!--android:name="com.dandan.love.fragment.FindMainFragmentent"-->
+        <!--android:id="@+id/fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/main_navigation_view"/>-->
+
+    <FrameLayout
+        android:id="@+id/fragments_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</android.support.constraint.ConstraintLayout>

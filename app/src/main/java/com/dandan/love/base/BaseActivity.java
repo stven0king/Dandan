@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dandan.love.common.network.RetrofitTask;
+
+import rx.Observable;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -35,6 +38,10 @@ public class BaseActivity extends AppCompatActivity {
             this.mCompositeSubscription = new CompositeSubscription();
         }
         this.mCompositeSubscription.add(s);
+    }
+
+    protected <T> Observable<T> submitForObservable(RetrofitTask<T> task){
+        return task.exeForObservable() ;
     }
 
     @Override
