@@ -1,9 +1,6 @@
 package com.dandan.love.common.network.task;
 
-import android.util.Log;
-
 import com.dandan.love.bean.BaiDuImageModel;
-import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.RequestParams;
 import com.dandan.love.common.network.RetrofitTask;
 import com.dandan.love.config.RetrofitInterfaceConfig;
@@ -62,7 +59,7 @@ public class BaiduImageGetListTask extends RetrofitTask<ArrayList<BaiDuImageMode
                     if (null != jsonArray && jsonArray.length() > 0) {
                         result = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            BaiDuImageModel model = BaiDuImageModel.parse(jsonArray.getJSONObject(i));
+                            BaiDuImageModel model = BaiDuImageModel.parseFindImageModel(jsonArray.getJSONObject(i));
                             if (null != model) {
                                 result.add(model);
                             }

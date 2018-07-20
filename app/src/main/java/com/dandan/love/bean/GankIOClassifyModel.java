@@ -1,5 +1,7 @@
 package com.dandan.love.bean;
 
+import com.dandan.love.common.network.task.GankDataGetListTask;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * Created by Tanzhenxing
  * Date: 2018/7/11 下午10:59
- * Description:
+ * Description: gank.io api 类别
  */
 public class GankIOClassifyModel implements Serializable{
     private static final long serialVersionUID = -7135223069102036776L;
@@ -46,7 +48,7 @@ public class GankIOClassifyModel implements Serializable{
 
 
 
-    public static GankIOClassifyModel parse(JSONObject jsonObject) {
+    public static GankIOClassifyModel parseFindImageModel(JSONObject jsonObject) {
         GankIOClassifyModel result = null;
         if (null != jsonObject) {
             try {
@@ -155,5 +157,17 @@ public class GankIOClassifyModel implements Serializable{
 
     public void setWho(String who) {
         this.who = who;
+    }
+
+    public FindImageModel parseFindImageModel() {
+        FindImageModel findImageModel = null;
+        if (GankDataGetListTask.CLASSIFY_TYPE[0].equals(this.type)) {
+            findImageModel = new FindImageModel();
+            findImageModel.setDesc(this.who);
+            findImageModel.setSmallPicUrl(this.url);
+            findImageModel.setBigPicUrl(this.url);
+            findImageModel.setSourceUrl(this.url);
+        }
+        return findImageModel;
     }
 }

@@ -15,16 +15,15 @@ import java.util.List;
  * Date: 2018/7/11 下午10:07
  * Description:
  */
-public abstract class BaseHeaderAdapter<T extends MultiItemEntity> extends BaseMultiItemQuickAdapter<T, BaseViewHolder> {
-    public static final int TYPE_HEADER = 1;
-    public static final int TYPE_DATA = 2;
+public abstract class BaseRecycleAdapter<T extends MultiItemEntity> extends BaseMultiItemQuickAdapter<T, BaseViewHolder> {
+    public static final int TYPE_DATA = 0;
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public BaseHeaderAdapter(List data) {
+    public BaseRecycleAdapter(List data) {
         super(data);
         addItemTypes();
     }
@@ -35,12 +34,10 @@ public abstract class BaseHeaderAdapter<T extends MultiItemEntity> extends BaseM
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        //FullSpanUtil.onAttachedToRecyclerView(recyclerView, this, TYPE_HEADER);
     }
 
     @Override
     public void onViewAttachedToWindow(BaseViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        //FullSpanUtil.onViewAttachedToWindow(holder, this, TYPE_HEADER);
     }
 }

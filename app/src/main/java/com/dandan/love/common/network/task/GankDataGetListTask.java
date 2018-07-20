@@ -1,9 +1,6 @@
 package com.dandan.love.common.network.task;
 
-import android.util.Log;
-
 import com.dandan.love.bean.GankIOClassifyModel;
-import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.RetrofitTask;
 
 import org.json.JSONArray;
@@ -41,7 +38,6 @@ public class GankDataGetListTask extends RetrofitTask<ArrayList<GankIOClassifyMo
                 .map(new Func1<JSONObject, ArrayList<GankIOClassifyModel>>() {
                     @Override
                     public ArrayList<GankIOClassifyModel> call(JSONObject jsonObject) {
-                        Logger.d(TAG, jsonObject.toString());
                         ArrayList<GankIOClassifyModel> result = null;
                         try {
                             if (null != jsonObject && jsonObject.has("results")) {
@@ -49,7 +45,7 @@ public class GankDataGetListTask extends RetrofitTask<ArrayList<GankIOClassifyMo
                                 if (null != jsonArray && jsonArray.length() > 0) {
                                     result = new ArrayList<>();
                                     for (int i = 0; i < jsonArray.length(); i++) {
-                                        GankIOClassifyModel model = GankIOClassifyModel.parse(jsonArray.getJSONObject(i));
+                                        GankIOClassifyModel model = GankIOClassifyModel.parseFindImageModel(jsonArray.getJSONObject(i));
                                         if (null != model) {
                                             result.add(model);
                                         }

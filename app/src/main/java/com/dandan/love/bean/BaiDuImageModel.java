@@ -2,6 +2,8 @@ package com.dandan.love.bean;
 
 import android.text.TextUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -9,7 +11,7 @@ import java.io.Serializable;
 /**
  * Created by Tanzhenxing
  * Date: 2018/7/12 下午11:18
- * Description:
+ * Description: 百度图片
  */
 public class BaiDuImageModel implements Serializable{
     //{
@@ -77,8 +79,9 @@ public class BaiDuImageModel implements Serializable{
     private String fromPageTitleEnc;
     private int width;
     private int height;
+    private String objUrl;
 
-    public static BaiDuImageModel parse(JSONObject jsonObject) {
+    public static BaiDuImageModel parseFindImageModel(JSONObject jsonObject) {
         BaiDuImageModel model = null;
         if (null != jsonObject) {
             String imageurl = jsonObject.optString("thumbURL");
@@ -95,6 +98,21 @@ public class BaiDuImageModel implements Serializable{
             model.fromPageTitleEnc = jsonObject.optString("fromPageTitleEnc");
             model.width = jsonObject.optInt("width");
             model.height = jsonObject.optInt("height");
+            if (jsonObject.has("replaceUrl")) {
+                JSONArray jsonArray = jsonObject.optJSONArray("replaceUrl");
+                try {
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String url = object.optString("ObjURL");
+                        if (!TextUtils.isEmpty(url)) {
+                            model.objUrl = url;
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return model;
     }
@@ -169,5 +187,14 @@ public class BaiDuImageModel implements Serializable{
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public FindImageModel parseFindImageModel() {
+        FindImageModel findImageModel = new FindImageModel();
+        findImageModel.setDesc(this.fromPageTitleEnc);
+        findImageModel.setSmallPicUrl(TextUtils.isEmpty(this.thumbURL) ? this.middleURL : this.thumbURL);
+        findImageModel.setBigPicUrl(this.largeTnImageUrl);
+        findImageModel.setSourceUrl(this.objUrl);
+        return findImageModel;
     }
 }

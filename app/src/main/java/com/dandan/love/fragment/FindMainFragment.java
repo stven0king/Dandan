@@ -18,11 +18,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.dandan.love.App;
 import com.dandan.love.R;
 import com.dandan.love.activity.MainActivity;
-import com.dandan.love.base.BaseHeaderAdapter;
+import com.dandan.love.base.BaseRecycleAdapter;
 import com.dandan.love.base.BaseLazyFragment;
 import com.dandan.love.bean.BaiDuImageModel;
+import com.dandan.love.bean.FindImageModel;
 import com.dandan.love.bean.GankIOClassifyModel;
-import com.dandan.love.bean.PinnedHeaderEntity;
+import com.dandan.love.bean.ImageItemEntity;
 import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.BaiduImageGetListTask;
@@ -33,7 +34,6 @@ import com.dandan.love.utils.DensityUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
 import rx.Subscription;
 
 /**
@@ -46,11 +46,11 @@ public class FindMainFragment extends BaseLazyFragment{
     private MainActivity activity;
     private RecyclerView mRecyclerView;
 
-    private BaseHeaderAdapter<PinnedHeaderEntity<String>> mAdapter;
+    private BaseRecycleAdapter<ImageItemEntity<FindImageModel>> mAdapter;
 
     private int mDisplayWidth;
 
-    List<PinnedHeaderEntity<String>> data = new ArrayList<>();
+    List<ImageItemEntity<FindImageModel>> data = new ArrayList<>();
 
     public FindMainFragment(MainActivity activity) {
         this.activity = activity;
@@ -73,35 +73,25 @@ public class FindMainFragment extends BaseLazyFragment{
 
     private void initView() {
         mDisplayWidth = DensityUtil.gettDisplayHeight(App.getApp());
-        mAdapter = new BaseHeaderAdapter<PinnedHeaderEntity<String>>(data) {
+        mAdapter = new BaseRecycleAdapter<ImageItemEntity<FindImageModel>>(data) {
             @Override
             protected void addItemTypes() {
-                //addItemType(BaseHeaderAdapter.TYPE_HEADER, R.layout.item_pinned_header);
-                addItemType(BaseHeaderAdapter.TYPE_DATA, R.layout.item_data);
+                addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_data);
             }
 
             @Override
-            protected void convert(BaseViewHolder holder, PinnedHeaderEntity<String> item) {
+            protected void convert(BaseViewHolder holder, ImageItemEntity<FindImageModel> item) {
                 switch (holder.getItemViewType()) {
-                    //case BaseHeaderAdapter.TYPE_HEADER:
-                    //    holder.setText(R.id.tv_animal, item.getPinnedHeaderName());
-                    //    holder.setOnClickListener(R.id.tv_animal, new View.OnClickListener() {
-                    //        @Override
-                    //        public void onClick(View v) {
-                    //
-                    //        }
-                    //    });
-                    //    break;
-                    case BaseHeaderAdapter.TYPE_DATA:
-
+                    case BaseRecycleAdapter.TYPE_DATA:
                         int position = holder.getLayoutPosition();
-                        holder.setText(R.id.tv_pos, item.getPinnedHeaderName());
+                        FindImageModel model = item.getData();
+                        holder.setText(R.id.tv_pos, TextUtils.isEmpty(model.getDesc()) ? "" : model.getDesc());
                         ImageView imageView = holder.getView(R.id.iv_animal);
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) imageView.getLayoutParams();
                         params.width = (mDisplayWidth - 100) / 2;
                         params.height = (position % 3 == 0) ? 500 : 660;
                         imageView.setLayoutParams(params);
-                        GlideApp.with(getActivity()).load(item.getData()).into(imageView);
+                        GlideApp.with(getActivity()).load(model.getSmallPicUrl()).into(imageView);
                         break;
                 }
             }
@@ -110,8 +100,8 @@ public class FindMainFragment extends BaseLazyFragment{
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int i) {
-                final PinnedHeaderEntity<String> entity = (PinnedHeaderEntity<String>) mAdapter.getData().get(i);
-                new ImagePreviewFragment(getActivity().getSupportFragmentManager()).open().show(entity.getData());
+                final ImageItemEntity<FindImageModel> entity = mAdapter.getData().get(i);
+                new ImagePreviewFragment(getActivity().getSupportFragmentManager()).open().show(entity.getData().getSourceUrl());
             }
         });
     }
@@ -130,7 +120,8 @@ public class FindMainFragment extends BaseLazyFragment{
                     public void onNext(ArrayList<GankIOClassifyModel> list) {
                         if (null != list && list.size() > 0) {
                             for (GankIOClassifyModel tmp:list) {
-                                data.add(new PinnedHeaderEntity<String>(tmp.getUrl(), BaseHeaderAdapter.TYPE_DATA, tmp.getSource()));
+                                FindImageModel model = tmp.parseFindImageModel();
+                                data.add(new ImageItemEntity<>(model));
 
                             }
                             mAdapter.notifyDataSetChanged();
@@ -145,11 +136,8 @@ public class FindMainFragment extends BaseLazyFragment{
                     public void onNext(ArrayList<BaiDuImageModel> list) {
                         if (null != list && list.size() > 0) {
                             for (BaiDuImageModel tmp:list) {
-                                String url = !TextUtils.isEmpty(tmp.getHoverURL()) ?
-                                        tmp.getHoverURL() : !TextUtils.isEmpty(tmp.getMiddleURL()) ?
-                                        tmp.getMiddleURL() : !TextUtils.isEmpty(tmp.getThumbURL()) ?
-                                        tmp.getThumbURL() : tmp.getLargeTnImageUrl();
-                                data.add(new PinnedHeaderEntity<String>(url, BaseHeaderAdapter.TYPE_DATA, tmp.getFromPageTitleEnc()));
+                                FindImageModel model = tmp.parseFindImageModel();
+                                data.add(new ImageItemEntity<>(model));
 
                             }
                             mAdapter.notifyDataSetChanged();
