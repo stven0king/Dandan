@@ -9,28 +9,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dandan.love.R;
-import com.dandan.love.activity.MainActivity;
 import com.dandan.love.base.BaseFragment;
 import com.dandan.love.common.download.CallBack;
 import com.dandan.love.common.image.DownImageImpl;
-import com.dandan.love.config.FileConfig;
 import com.dandan.love.config.GlideApp;
 import com.dandan.love.config.ImageConfig;
-import com.dandan.love.utils.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 
 @SuppressLint("ValidFragment")
 public class ImagePreviewFragment extends BaseFragment implements View.OnClickListener{
     private String TAG;
     private FragmentManager fragmentManager;
     private boolean mIsOpen = false;
-    private View rootView;
+    private View contentView;
     private ViewGroup mGroup;
     private ImageView imageView;
     private String imageUrl;
@@ -42,11 +39,10 @@ public class ImagePreviewFragment extends BaseFragment implements View.OnClickLi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_image_preview_layout, null);
-        imageView = rootView.findViewById(R.id.image);
-        GlideApp.with(this).load(imageUrl).into(this.imageView);
+        contentView = inflater.inflate(R.layout.fragment_image_preview_layout, null);
+        imageView = contentView.findViewById(R.id.image);
         mGroup = (ViewGroup) getActivity().getWindow().getDecorView();
-        mGroup.addView(rootView);
+        mGroup.addView(contentView);
         imageView.setOnClickListener(this);
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -67,6 +63,9 @@ public class ImagePreviewFragment extends BaseFragment implements View.OnClickLi
                 return true;
             }
         });
+        GlideApp.with(this).load(imageUrl).into(this.imageView);
+        mGroup.startAnimation(createTranslationInAnimation());
+        imageView.startAnimation(createAlphaInAnimation());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -89,18 +88,26 @@ public class ImagePreviewFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onDestroyView() {
         mIsOpen = false;
-        if (rootView != null) {
+        if (null != mGroup) {
+            mGroup.startAnimation(createTranslationOutAnimation());
+        }
+        if (null != imageView) {
+            imageView.startAnimation(createAlphaOutAnimation());
+        }
+        if (contentView != null) {
             //为了播放动画这里做了延迟
-            rootView.postDelayed(new Runnable() {
+            contentView.postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
                     if (mGroup != null) {
-                        mGroup.removeView(rootView);
+                        mGroup.removeView(contentView);
+                        mGroup = null;
+                        imageView = null;
                     }
-                    rootView = null;
+                    contentView = null;
                 }
-            }, 300);
+            }, 350);
         }
         super.onDestroyView();
     }
@@ -127,5 +134,36 @@ public class ImagePreviewFragment extends BaseFragment implements View.OnClickLi
                 mIsOpen = false;
             }
         }
+    }
+
+    private Animation createAlphaInAnimation() {
+        AlphaAnimation an = new AlphaAnimation(0, 1);
+        an.setDuration(300);
+        return an;
+    }
+
+
+    private Animation createAlphaOutAnimation() {
+        AlphaAnimation an = new AlphaAnimation(1, 0);
+        an.setDuration(300);
+        an.setFillAfter(true);
+        return an;
+    }
+
+
+    private Animation createTranslationInAnimation() {
+        int type = TranslateAnimation.RELATIVE_TO_SELF;
+        TranslateAnimation an = new TranslateAnimation(type, 0, type, 0, type, 1, type, 0);
+        an.setDuration(300);
+        return an;
+    }
+
+
+    private Animation createTranslationOutAnimation() {
+        int type = TranslateAnimation.RELATIVE_TO_SELF;
+        TranslateAnimation an = new TranslateAnimation(type, 0, type, 0, type, 0, type, 1);
+        an.setDuration(300);
+        an.setFillAfter(true);
+        return an;
     }
 }
