@@ -7,10 +7,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class DExecutors {
-    private static final int corePoolSize = 10 ;
-    private static final int maximumPoolSize = 20 ;
-    private static final long keepAliveTime = 60 ;
-    private static final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>() ;
+    private static final int corePoolSize = Runtime.getRuntime().availableProcessors() + 1;
+    private static final int maximumPoolSize = Runtime.getRuntime().availableProcessors() - 1;
+    private static final long keepAliveTime = 60;
+    private static final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(128);
 
     private ExecutorService executor;
 

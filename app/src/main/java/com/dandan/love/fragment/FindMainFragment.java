@@ -1,5 +1,6 @@
 package com.dandan.love.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dandan.love.App;
 import com.dandan.love.R;
+import com.dandan.love.activity.MainActivity;
 import com.dandan.love.base.BaseHeaderAdapter;
 import com.dandan.love.base.BaseLazyFragment;
 import com.dandan.love.bean.BaiDuImageModel;
@@ -39,7 +41,9 @@ import rx.Subscription;
  * Date: 2018/7/18 下午10:47
  * Description:
  */
+@SuppressLint("ValidFragment")
 public class FindMainFragment extends BaseLazyFragment{
+    private MainActivity activity;
     private RecyclerView mRecyclerView;
 
     private BaseHeaderAdapter<PinnedHeaderEntity<String>> mAdapter;
@@ -47,6 +51,10 @@ public class FindMainFragment extends BaseLazyFragment{
     private int mDisplayWidth;
 
     List<PinnedHeaderEntity<String>> data = new ArrayList<>();
+
+    public FindMainFragment(MainActivity activity) {
+        this.activity = activity;
+    }
 
     @Nullable
     @Override
@@ -117,17 +125,7 @@ public class FindMainFragment extends BaseLazyFragment{
     private void initdata() {
         Subscription s = new GankDataGetListTask(GankDataGetListTask.CLASSIFY_TYPE[0], 1)
                 .exeForObservable()
-                .subscribe(new Subscriber<ArrayList<GankIOClassifyModel>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
+                .subscribe(new SimpleSubscriber<ArrayList<GankIOClassifyModel>>() {
                     @Override
                     public void onNext(ArrayList<GankIOClassifyModel> list) {
                         if (null != list && list.size() > 0) {
@@ -140,7 +138,7 @@ public class FindMainFragment extends BaseLazyFragment{
                     }
                 });
         addSubscription(s);
-        Subscription s1 = new BaiduImageGetListTask(0, "丝袜美腿高清")
+        Subscription s1 = new BaiduImageGetListTask(0, "刘亦菲")
                 .exeForObservable()
                 .subscribe(new SimpleSubscriber<ArrayList<BaiDuImageModel>>() {
                     @Override

@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView.OnNavigationItemSelect
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -47,6 +48,10 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
 
     private BottomNavigationView navigationView;
 
+    private Toolbar toolbar;
+
+    private String titleName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +62,8 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
 
     private void initView() {
         navigationView = findViewById(R.id.main_navigation_view);
+        toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
     }
 
     private void initData() {
@@ -64,9 +71,9 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
         mTabTag.put(HOUST, id_tabs[0]);
         mTabTag.put(WORK, id_tabs[1]);
         mTabTag.put(FIND, id_tabs[2]);
-        houstFragment = new HoustMainFragment();
-        workFragment = new WorkMainFragment();
-        findFragment = new FindMainFragment();
+        houstFragment = new HoustMainFragment(this);
+        workFragment = new WorkMainFragment(this);
+        findFragment = new FindMainFragment(this);
         mTabFragment.put(HOUST, houstFragment);
         mTabFragment.put(WORK, workFragment);
         mTabFragment.put(FIND, findFragment);
@@ -75,6 +82,7 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
                 .replace(R.id.fragments_layout,mTabFragment.get(HOUST))
                 .show(mTabFragment.get(HOUST)).commitAllowingStateLoss();
         currentFragment = HOUST;
+        navigationView.setSelectedItemId(id_tabs[0]);
     }
 
 
@@ -109,12 +117,17 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
         Fragment previewFragment = mTabFragment.get(currentFragment);
         Fragment nextFragment = mTabFragment.get(tab);
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        //transaction.hide(previewFragment);
-        //if(mTabFragment.get(tab).isAdded() == false) {
-        //    transaction.add(R.id.fragments_layout,nextFragment);
-        //}
-        //transaction.show(nextFragment).commitAllowingStateLoss();
-        transaction.replace(R.id.fragments_layout, nextFragment).commitAllowingStateLoss();
+        transaction.hide(previewFragment);
+        if(mTabFragment.get(tab).isAdded() == false) {
+            transaction.add(R.id.fragments_layout,nextFragment);
+        }
+        transaction.show(nextFragment).commitAllowingStateLoss();
+        //transaction.replace(R.id.fragments_layout, nextFragment).commitAllowingStateLoss();
         currentFragment = tab;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
+        toolbar.setTitle(titleName);
     }
 }
