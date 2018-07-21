@@ -4,6 +4,7 @@ package com.dandan.love.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.dandan.love.common.network.RetrofitTask;
 
@@ -11,7 +12,7 @@ import rx.Observable;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements View.OnClickListener{
     protected String TAG;
     private CompositeSubscription mCompositeSubscription;
 
@@ -45,5 +46,10 @@ public class BaseFragment extends Fragment {
 
     protected <T> Observable<T> submitForObservable(RetrofitTask<T> task){
         return task.exeForObservable() ;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

@@ -28,6 +28,7 @@ import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.BaiduImageGetListTask;
 import com.dandan.love.common.network.task.GankDataGetListTask;
+import com.dandan.love.common.view.NetWorkErrorLayout;
 import com.dandan.love.config.GlideApp;
 import com.dandan.love.utils.DensityUtil;
 
@@ -45,10 +46,12 @@ import rx.Subscription;
 public class FindMainFragment extends BaseLazyFragment{
     private MainActivity activity;
     private RecyclerView mRecyclerView;
-
+    private NetWorkErrorLayout netWorkErrorLayout;
     private BaseRecycleAdapter<ImageItemEntity<FindImageModel>> mAdapter;
 
     private int mDisplayWidth;
+
+    private int showErrorLayout = 2;
 
     List<ImageItemEntity<FindImageModel>> data = new ArrayList<>();
 
@@ -61,6 +64,8 @@ public class FindMainFragment extends BaseLazyFragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Logger.d(TAG, "onCreateVie");
         View view = inflater.inflate(R.layout.fragment_find_main_layout, container, false);
+        netWorkErrorLayout = view.findViewById(R.id.network_error_layout);
+        netWorkErrorLayout.setOnClickListener(this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL));
@@ -127,6 +132,13 @@ public class FindMainFragment extends BaseLazyFragment{
                             mAdapter.notifyDataSetChanged();
                         }
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        showErrorLayout--;
+                        checkErrorLayout();
+                    }
                 });
         addSubscription(s);
         Subscription s1 = new BaiduImageGetListTask(0, "刘亦菲")
@@ -143,7 +155,35 @@ public class FindMainFragment extends BaseLazyFragment{
                             mAdapter.notifyDataSetChanged();
                         }
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        showErrorLayout--;
+                        checkErrorLayout();
+                    }
                 });
         addSubscription(s1);
+    }
+
+    private void checkErrorLayout() {
+        if (showErrorLayout == 0) {
+            mRecyclerView.setVisibility(View.GONE);
+            netWorkErrorLayout.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            netWorkErrorLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.network_error_layout:
+                showErrorLayout = 2;
+                checkErrorLayout();
+                initdata();
+                break;
+        }
     }
 }
