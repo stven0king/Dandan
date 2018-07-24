@@ -18,16 +18,20 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.dandan.love.App;
 import com.dandan.love.R;
 import com.dandan.love.activity.MainActivity;
+import com.dandan.love.base.BaseActivity;
 import com.dandan.love.base.BaseRecycleAdapter;
 import com.dandan.love.base.BaseLazyFragment;
 import com.dandan.love.bean.BaiDuImageModel;
 import com.dandan.love.bean.FindImageModel;
 import com.dandan.love.bean.GankIOClassifyModel;
 import com.dandan.love.bean.RecycleItemEntity;
+import com.dandan.love.bean.YYHuaBanModel;
+import com.dandan.love.common.activity.BaseWebViewActivity;
 import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.BaiduImageGetListTask;
 import com.dandan.love.common.network.task.GankDataGetListTask;
+import com.dandan.love.common.network.task.YyHuabanDataGetTask;
 import com.dandan.love.common.view.NetWorkErrorLayout;
 import com.dandan.love.config.GlideApp;
 import com.dandan.love.utils.DensityUtil;
@@ -51,7 +55,7 @@ public class FindMainFragment extends BaseLazyFragment{
 
     private int mDisplayWidth;
 
-    private int showErrorLayout = 2;
+    private int showErrorLayout = 1;
 
     List<RecycleItemEntity<FindImageModel>> data = new ArrayList<>();
 
@@ -107,6 +111,7 @@ public class FindMainFragment extends BaseLazyFragment{
             public void onItemClick(BaseQuickAdapter adapter, View view, int i) {
                 final RecycleItemEntity<FindImageModel> entity = mAdapter.getData().get(i);
                 new ImagePreviewFragment(getActivity().getSupportFragmentManager()).open().show(entity.getData().getSourceUrl());
+                //BaseWebViewActivity.startActivituy(getActivity(), entity.getData().getBigPicUrl());
             }
         });
     }
@@ -118,6 +123,11 @@ public class FindMainFragment extends BaseLazyFragment{
     }
 
     private void initdata() {
+        initGankioEvent();
+        initBaiduImageEvent();
+    }
+
+    private void initGankioEvent() {
         Subscription s = submitForObservable(new GankDataGetListTask(GankDataGetListTask.CLASSIFY_TYPE[0], 1))
                 .subscribe(new SimpleSubscriber<ArrayList<GankIOClassifyModel>>() {
                     @Override
@@ -140,6 +150,9 @@ public class FindMainFragment extends BaseLazyFragment{
                     }
                 });
         addSubscription(s);
+    }
+
+    private void initBaiduImageEvent() {
         Subscription s1 = submitForObservable(new BaiduImageGetListTask(0, "刘亦菲"))
                 .subscribe(new SimpleSubscriber<ArrayList<BaiDuImageModel>>() {
                     @Override
@@ -162,6 +175,36 @@ public class FindMainFragment extends BaseLazyFragment{
                     }
                 });
         addSubscription(s1);
+    }
+
+    private void initYiYuanHuaBanEvent() {
+        Subscription s = submitForObservable(new YyHuabanDataGetTask(0, "34"))
+                .subscribe(new SimpleSubscriber<ArrayList<YYHuaBanModel>>(){
+                    @Override
+                    public void onNext(ArrayList<YYHuaBanModel> list) {
+                        super.onNext(list);
+                        if (null != list && list.size() > 0) {
+                            for (YYHuaBanModel tmp:list) {
+                                FindImageModel model = new FindImageModel();
+                                model.setSourceUrl(tmp.getThumb());
+                                model.setSmallPicUrl(tmp.getThumb());
+                                model.setBigPicUrl(tmp.getUrl());
+                                model.setDesc(tmp.getTitle());
+                                data.add(new RecycleItemEntity<>(model));
+
+                            }
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        showErrorLayout--;
+                        checkErrorLayout();
+                    }
+                });
+        addSubscription(s);
     }
 
     private void checkErrorLayout() {

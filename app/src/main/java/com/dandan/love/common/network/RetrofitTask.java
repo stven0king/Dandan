@@ -2,6 +2,7 @@ package com.dandan.love.common.network;
 
 import com.dandan.love.common.network.api.FreedomApi;
 import com.dandan.love.common.network.api.GankAPI;
+import com.dandan.love.common.network.api.YiYuanApi;
 
 import rx.Observable;
 
@@ -14,10 +15,12 @@ public abstract class RetrofitTask<T> implements ITask {
     protected String TAG;
     protected GankAPI gankAPI;
     protected FreedomApi freedomApi;
+    protected YiYuanApi yiYuanApi;
     public RetrofitTask() {
         this.TAG = this.getClass().getSimpleName();
         gankAPI = RetrofitApiFactory.createApi(GankAPI.class);
         freedomApi = RetrofitApiFactory.createApi(FreedomApi.class);
+        yiYuanApi = RetrofitApiFactory.createApi(YiYuanApi.class);
     }
 
     @Override

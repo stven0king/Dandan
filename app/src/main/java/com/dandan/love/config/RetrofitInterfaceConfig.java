@@ -8,6 +8,8 @@ package com.dandan.love.config;
 public class RetrofitInterfaceConfig {
 
     public final static String GANK_IO = "http://gank.io";
+    //易源接口
+    public final static String YIYUAN_API = "http://route.showapi.com";
 
     public final static String BAI_DU_IMAGE = "http://image.baidu.com";
     public final static String GANK_DATA = GANK_IO + "/api/data";
@@ -16,4 +18,6 @@ public class RetrofitInterfaceConfig {
 
     public final static String BAIDU_IMAGE_SEARCH_URL =  BAI_DU_IMAGE + "/search/acjson";
 
+    //花瓣福利
+    public final static String YIYUAN_API_HUABAN = YIYUAN_API + "/819-1";
 }

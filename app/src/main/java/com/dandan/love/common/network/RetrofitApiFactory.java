@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.dandan.love.common.logger.core.Logger;
+import com.dandan.love.common.network.bean.YYWrapper;
 import com.dandan.love.common.network.converter.ByteArrayConverterFactory;
 import com.dandan.love.common.network.converter.Host;
 import com.dandan.love.common.network.converter.JSONObjectResponseConverterFactory;
@@ -11,6 +12,8 @@ import com.dandan.love.common.network.converter.StringResponseConverterFactory;
 import com.dandan.love.config.Config;
 import com.dandan.love.config.FileConfig;
 import com.dandan.love.utils.AndroidUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +23,7 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Tanzhenxing
@@ -38,7 +42,9 @@ public class RetrofitApiFactory {
     private static OkHttpClient okHttpClient = null ;
     private static File cacheFile = new File(AndroidUtils.getAppCacheDir(), FileConfig.NETWORK_CACHE);
     private static Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
-
+    private static Gson gson = new GsonBuilder()
+            .registerTypeAdapter(YYWrapper.class, new YYWrapper.JsonAdapter())
+            .create();
     static{
         /*
          * 初始化OkHttpClient
@@ -72,7 +78,7 @@ public class RetrofitApiFactory {
                 .addConverterFactory(ByteArrayConverterFactory.create())
                 .addConverterFactory(JSONObjectResponseConverterFactory.create())
                 .addConverterFactory(StringResponseConverterFactory.create())
-                //.addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         T t = retrofit.create(clz) ;

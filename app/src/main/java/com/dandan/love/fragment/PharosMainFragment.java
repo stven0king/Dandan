@@ -29,21 +29,21 @@ import java.util.List;
  * Description:
  */
 @SuppressLint("ValidFragment")
-public class HoustMainFragment extends BaseLazyFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class PharosMainFragment extends BaseLazyFragment implements SwipeRefreshLayout.OnRefreshListener{
     private MainActivity activity;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private List<GankIOClassifyModel> list = new ArrayList<>();
     private BaseRecycleAdapter<RecycleItemEntity<GankIOClassifyModel>> mAdapter;
-    public HoustMainFragment(MainActivity activity) {
+    public PharosMainFragment(MainActivity activity) {
         this.activity = activity;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_houst_main_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_pharos_main_layout, container, false);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         recyclerView = view.findViewById(R.id.recycler_view);
         linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
@@ -60,14 +60,20 @@ public class HoustMainFragment extends BaseLazyFragment implements SwipeRefreshL
         mAdapter = new BaseRecycleAdapter<RecycleItemEntity<GankIOClassifyModel>>(list) {
             @Override
             protected void addItemTypes() {
-                addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_houst_main);
+                addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_pharos_main);
             }
 
             @Override
-            protected void convert(BaseViewHolder helper, RecycleItemEntity<GankIOClassifyModel> item) {
-
+            protected void convert(BaseViewHolder holder, RecycleItemEntity<GankIOClassifyModel> item) {
+                switch (holder.getItemViewType()) {
+                    case BaseRecycleAdapter.TYPE_DATA:
+                        int position = holder.getLayoutPosition();
+                        GankIOClassifyModel model = item.getData();
+                        break;
+                }
             }
         };
+        recyclerView.addOnScrollListener(scrollListener);
         return view;
     }
 

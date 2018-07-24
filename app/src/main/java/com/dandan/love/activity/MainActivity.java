@@ -9,14 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.dandan.love.R;
 import com.dandan.love.base.BaseActivity;
 import com.dandan.love.base.BaseLazyFragment;
 import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.fragment.FindMainFragment;
-import com.dandan.love.fragment.HoustMainFragment;
+import com.dandan.love.fragment.PharosMainFragment;
 import com.dandan.love.fragment.WorkMainFragment;
 
 import java.util.HashMap;
@@ -29,13 +28,13 @@ import java.util.Map;
  */
 public class MainActivity extends BaseActivity implements OnNavigationItemSelectedListener{
 
-    private int[] id_tabs = new int[]{R.id.tab_light_house, R.id.tab_work, R.id.tab_find};
-    public String HOUST = "HOUST";
+    private int[] id_tabs = new int[]{R.id.tab_pharos, R.id.tab_work, R.id.tab_find};
+    public String PHAROS = "PHAROS";
     public String WORK = "WORK";
     public String FIND = "FIND";
     private Map<String, Integer> mTabTag = new HashMap<>();
 
-    private BaseLazyFragment houstFragment;
+    private BaseLazyFragment pharosFragment;
     private BaseLazyFragment workFragment;
     private BaseLazyFragment findFragment;
 
@@ -68,20 +67,20 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
 
     private void initData() {
         this.mFragmentManager = this.getSupportFragmentManager();
-        mTabTag.put(HOUST, id_tabs[0]);
+        mTabTag.put(PHAROS, id_tabs[0]);
         mTabTag.put(WORK, id_tabs[1]);
         mTabTag.put(FIND, id_tabs[2]);
-        houstFragment = new HoustMainFragment(this);
+        pharosFragment = new PharosMainFragment(this);
         workFragment = new WorkMainFragment(this);
         findFragment = new FindMainFragment(this);
-        mTabFragment.put(HOUST, houstFragment);
+        mTabFragment.put(PHAROS, pharosFragment);
         mTabFragment.put(WORK, workFragment);
         mTabFragment.put(FIND, findFragment);
         navigationView.setOnNavigationItemSelectedListener(this);
         mFragmentManager.beginTransaction()
-                .replace(R.id.fragments_layout,mTabFragment.get(HOUST))
-                .show(mTabFragment.get(HOUST)).commitAllowingStateLoss();
-        currentFragment = HOUST;
+                .replace(R.id.fragments_layout,mTabFragment.get(PHAROS))
+                .show(mTabFragment.get(PHAROS)).commitAllowingStateLoss();
+        currentFragment = PHAROS;
         navigationView.setSelectedItemId(id_tabs[2]);
     }
 
@@ -89,10 +88,10 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.tab_light_house:
+            case R.id.tab_pharos:
                 Logger.d(TAG, "tab_light_house");
-                if (!HOUST.equals(currentFragment)) {
-                    switchCurrentTab(HOUST);
+                if (!PHAROS.equals(currentFragment)) {
+                    switchCurrentTab(PHAROS);
                 }
                 return true;
             case R.id.tab_work:

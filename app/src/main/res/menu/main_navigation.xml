@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="@string/tab_light_house"
         android:icon="@drawable/lighthouse_tab_icon"
-        android:id="@+id/tab_light_house"/>
+        android:id="@+id/tab_pharos"/>
 
     <item android:title="@string/tab_work"
         android:icon="@drawable/work_tab_icon"

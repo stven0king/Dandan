@@ -16,6 +16,14 @@ public class FindImageModel implements Serializable{
     private String bigPicUrl;
     private String desc;
 
+    public FindImageModel() {
+    }
+
+    public FindImageModel(String sourceUrl, String desc) {
+        this.sourceUrl = sourceUrl;
+        this.desc = desc;
+    }
+
     public String getSmallPicUrl() {
         if (!TextUtils.isEmpty(smallPicUrl)) {
             return smallPicUrl;
