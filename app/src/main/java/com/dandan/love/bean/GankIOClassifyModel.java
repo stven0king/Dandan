@@ -64,7 +64,7 @@ public class GankIOClassifyModel implements Serializable{
                 result.who = jsonObject.optString("who");
                 if (jsonObject.has("images")) {
                     JSONArray jsonArray = jsonObject.optJSONArray("images");
-                    if (null != null && jsonArray.length() > 0) {
+                    if (null != jsonArray && jsonArray.length() > 0) {
                         result.images = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             result.images.add(String.valueOf(jsonArray.get(i)));

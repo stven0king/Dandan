@@ -7,10 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dandan.love.R;
 import com.dandan.love.activity.MainActivity;
@@ -18,10 +21,16 @@ import com.dandan.love.base.BaseLazyFragment;
 import com.dandan.love.base.BaseRecycleAdapter;
 import com.dandan.love.bean.GankIOClassifyModel;
 import com.dandan.love.bean.RecycleItemEntity;
+import com.dandan.love.common.activity.BaseWebViewActivity;
 import com.dandan.love.common.logger.core.Logger;
+import com.dandan.love.common.network.SimpleSubscriber;
+import com.dandan.love.common.network.task.GankDataGetListTask;
+import com.dandan.love.config.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Subscription;
 
 /**
  * Created by Tanzhenxing
@@ -34,8 +43,11 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private List<GankIOClassifyModel> list = new ArrayList<>();
+    private List<RecycleItemEntity<GankIOClassifyModel>> listData = new ArrayList<>();
     private BaseRecycleAdapter<RecycleItemEntity<GankIOClassifyModel>> mAdapter;
+
+    private int pagetName = 0;
+
     public PharosMainFragment(MainActivity activity) {
         this.activity = activity;
     }
@@ -57,7 +69,8 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
         swipeRefreshLayout.setDistanceToTriggerSync(100);
         //设置大小
         swipeRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
-        mAdapter = new BaseRecycleAdapter<RecycleItemEntity<GankIOClassifyModel>>(list) {
+        swipeRefreshLayout.setOnRefreshListener(this);
+        mAdapter = new BaseRecycleAdapter<RecycleItemEntity<GankIOClassifyModel>>(listData) {
             @Override
             protected void addItemTypes() {
                 addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_pharos_main);
@@ -67,13 +80,35 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
             protected void convert(BaseViewHolder holder, RecycleItemEntity<GankIOClassifyModel> item) {
                 switch (holder.getItemViewType()) {
                     case BaseRecycleAdapter.TYPE_DATA:
-                        int position = holder.getLayoutPosition();
                         GankIOClassifyModel model = item.getData();
+                        holder.setText(R.id.time_tv, model.getCreateTime().substring(0, model.getCreateTime().indexOf("T")));
+                        holder.setText(R.id.desc_tv, model.getDesc());
+                        holder.setText(R.id.author_tv, "作者：" + model.getWho());
+                        ImageView imageView = holder.getView(R.id.image_iv);
+                        if (null != model.getImages() && model.getImages().size() > 0) {
+                            holder.setVisible(R.id.image_layout, true);
+                            holder.setText(R.id.image_tv, model.getType());
+                            GlideApp.with(getActivity()).load(model.getImages().get(0)).into(imageView);
+                        } else {
+                            holder.setVisible(R.id.image_layout, false);
+                        }
                         break;
                 }
             }
         };
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addOnScrollListener(scrollListener);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener(){
+
+
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                final RecycleItemEntity<GankIOClassifyModel> entity = mAdapter.getData().get(position);
+                BaseWebViewActivity.startActivituy(getActivity(), entity.getData().getUrl());
+            }
+        });
+        initData();
         return view;
     }
 
@@ -83,13 +118,9 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Logger.d(TAG, "onDestroyView");
-    }
-
-    @Override
     public void onRefresh() {
+        Logger.d(TAG, "onRefresh: ");
+        initGankioEvent();
 
     }
 
@@ -110,12 +141,39 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
                 boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                 if (!isRefreshing) {
                     swipeRefreshLayout.setRefreshing(true);
-
+                    initGankioEvent();
                 }
 
             }
         }
     };
+
+    private void initData() {
+        initGankioEvent();
+    }
+
+    private void initGankioEvent() {
+        Subscription s = submitForObservable(new GankDataGetListTask(GankDataGetListTask.CLASSIFY_TYPE[1], pagetName))
+                .subscribe(new SimpleSubscriber<ArrayList<GankIOClassifyModel>>() {
+                    @Override
+                    public void onNext(ArrayList<GankIOClassifyModel> list) {
+                        if (null != list && list.size() > 0) {
+                            for (GankIOClassifyModel model:list) {
+                                listData.add(new RecycleItemEntity<>(model));
+                            }
+                            pagetName++;
+                            mAdapter.notifyDataSetChanged();
+                            completeRefreshData();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+                });
+        addSubscription(s);
+    }
 
     private void completeRefreshData() {
         if (null != swipeRefreshLayout) {

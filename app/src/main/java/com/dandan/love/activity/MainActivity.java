@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
                 .replace(R.id.fragments_layout,mTabFragment.get(PHAROS))
                 .show(mTabFragment.get(PHAROS)).commitAllowingStateLoss();
         currentFragment = PHAROS;
-        navigationView.setSelectedItemId(id_tabs[2]);
+        navigationView.setSelectedItemId(id_tabs[0]);
     }
 
 
