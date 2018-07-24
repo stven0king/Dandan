@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements OnNavigationItemSelect
                 .replace(R.id.fragments_layout,mTabFragment.get(HOUST))
                 .show(mTabFragment.get(HOUST)).commitAllowingStateLoss();
         currentFragment = HOUST;
-        navigationView.setSelectedItemId(id_tabs[0]);
+        navigationView.setSelectedItemId(id_tabs[2]);
     }
 
 

@@ -1,6 +1,7 @@
 package com.dandan.love.fragment;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ public class ImagePreviewFragment extends BaseFragment implements View.OnClickLi
     private ViewGroup mGroup;
     private ImageView imageView;
     private String imageUrl;
+    private FrameLayout parentView;
     public ImagePreviewFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
         this.TAG = this.getClass().getSimpleName();
@@ -39,10 +42,14 @@ public class ImagePreviewFragment extends BaseFragment implements View.OnClickLi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        parentView = new FrameLayout(getActivity());
+        parentView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         contentView = inflater.inflate(R.layout.fragment_image_preview_layout, null);
+        contentView.setBackgroundColor(Color.rgb(0, 0, 0));
         imageView = contentView.findViewById(R.id.image);
+        parentView.addView(contentView);
         mGroup = (ViewGroup) getActivity().getWindow().getDecorView();
-        mGroup.addView(contentView);
+        mGroup.addView(parentView);
         imageView.setOnClickListener(this);
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -87,29 +94,30 @@ public class ImagePreviewFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onDestroyView() {
+        super.onDestroyView();
         mIsOpen = false;
-        if (null != mGroup) {
-            mGroup.startAnimation(createTranslationOutAnimation());
-        }
         if (null != imageView) {
-            imageView.startAnimation(createAlphaOutAnimation());
+            imageView.startAnimation(createTranslationOutAnimation());
         }
-        if (contentView != null) {
+        if (null != parentView) {
+            parentView.startAnimation(createAlphaOutAnimation());
+        }
+        if (parentView != null) {
             //为了播放动画这里做了延迟
-            contentView.postDelayed(new Runnable() {
+            parentView.postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
                     if (mGroup != null) {
-                        mGroup.removeView(contentView);
+                        mGroup.removeView(parentView);
                         mGroup = null;
                         imageView = null;
+                        contentView = null;
                     }
-                    contentView = null;
+                    parentView = null;
                 }
-            }, 350);
+            }, 300);
         }
-        super.onDestroyView();
     }
 
     public ImagePreviewFragment open() {

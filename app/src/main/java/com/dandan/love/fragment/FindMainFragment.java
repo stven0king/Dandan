@@ -118,8 +118,7 @@ public class FindMainFragment extends BaseLazyFragment{
     }
 
     private void initdata() {
-        Subscription s = new GankDataGetListTask(GankDataGetListTask.CLASSIFY_TYPE[0], 1)
-                .exeForObservable()
+        Subscription s = submitForObservable(new GankDataGetListTask(GankDataGetListTask.CLASSIFY_TYPE[0], 1))
                 .subscribe(new SimpleSubscriber<ArrayList<GankIOClassifyModel>>() {
                     @Override
                     public void onNext(ArrayList<GankIOClassifyModel> list) {
@@ -141,8 +140,7 @@ public class FindMainFragment extends BaseLazyFragment{
                     }
                 });
         addSubscription(s);
-        Subscription s1 = new BaiduImageGetListTask(0, "刘亦菲")
-                .exeForObservable()
+        Subscription s1 = submitForObservable(new BaiduImageGetListTask(0, "刘亦菲"))
                 .subscribe(new SimpleSubscriber<ArrayList<BaiDuImageModel>>() {
                     @Override
                     public void onNext(ArrayList<BaiDuImageModel> list) {
