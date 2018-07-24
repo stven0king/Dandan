@@ -23,7 +23,7 @@ import com.dandan.love.base.BaseLazyFragment;
 import com.dandan.love.bean.BaiDuImageModel;
 import com.dandan.love.bean.FindImageModel;
 import com.dandan.love.bean.GankIOClassifyModel;
-import com.dandan.love.bean.ImageItemEntity;
+import com.dandan.love.bean.RecycleItemEntity;
 import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.BaiduImageGetListTask;
@@ -47,13 +47,13 @@ public class FindMainFragment extends BaseLazyFragment{
     private MainActivity activity;
     private RecyclerView mRecyclerView;
     private NetWorkErrorLayout netWorkErrorLayout;
-    private BaseRecycleAdapter<ImageItemEntity<FindImageModel>> mAdapter;
+    private BaseRecycleAdapter<RecycleItemEntity<FindImageModel>> mAdapter;
 
     private int mDisplayWidth;
 
     private int showErrorLayout = 2;
 
-    List<ImageItemEntity<FindImageModel>> data = new ArrayList<>();
+    List<RecycleItemEntity<FindImageModel>> data = new ArrayList<>();
 
     public FindMainFragment(MainActivity activity) {
         this.activity = activity;
@@ -78,14 +78,14 @@ public class FindMainFragment extends BaseLazyFragment{
 
     private void initView() {
         mDisplayWidth = DensityUtil.gettDisplayHeight(App.getApp());
-        mAdapter = new BaseRecycleAdapter<ImageItemEntity<FindImageModel>>(data) {
+        mAdapter = new BaseRecycleAdapter<RecycleItemEntity<FindImageModel>>(data) {
             @Override
             protected void addItemTypes() {
-                addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_data);
+                addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_find_main);
             }
 
             @Override
-            protected void convert(BaseViewHolder holder, ImageItemEntity<FindImageModel> item) {
+            protected void convert(BaseViewHolder holder, RecycleItemEntity<FindImageModel> item) {
                 switch (holder.getItemViewType()) {
                     case BaseRecycleAdapter.TYPE_DATA:
                         int position = holder.getLayoutPosition();
@@ -105,7 +105,7 @@ public class FindMainFragment extends BaseLazyFragment{
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int i) {
-                final ImageItemEntity<FindImageModel> entity = mAdapter.getData().get(i);
+                final RecycleItemEntity<FindImageModel> entity = mAdapter.getData().get(i);
                 new ImagePreviewFragment(getActivity().getSupportFragmentManager()).open().show(entity.getData().getSourceUrl());
             }
         });
@@ -125,7 +125,7 @@ public class FindMainFragment extends BaseLazyFragment{
                         if (null != list && list.size() > 0) {
                             for (GankIOClassifyModel tmp:list) {
                                 FindImageModel model = tmp.parseFindImageModel();
-                                data.add(new ImageItemEntity<>(model));
+                                data.add(new RecycleItemEntity<>(model));
 
                             }
                             mAdapter.notifyDataSetChanged();
@@ -147,7 +147,7 @@ public class FindMainFragment extends BaseLazyFragment{
                         if (null != list && list.size() > 0) {
                             for (BaiDuImageModel tmp:list) {
                                 FindImageModel model = tmp.parseFindImageModel();
-                                data.add(new ImageItemEntity<>(model));
+                                data.add(new RecycleItemEntity<>(model));
 
                             }
                             mAdapter.notifyDataSetChanged();

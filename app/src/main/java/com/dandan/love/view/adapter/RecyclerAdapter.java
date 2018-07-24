@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dandan.love.bean.ImageItemEntity;
+import com.dandan.love.bean.RecycleItemEntity;
 import com.dandan.love.listener.OnItemClickListener;
 import com.dandan.love.listener.PinnedHeaderNotifyer;
 import com.dandan.love.utils.FullSpanUtil;
@@ -18,7 +18,7 @@ import java.util.List;
  * Date: 2018/7/11 下午10:07
  * Description:
  */
-public abstract class RecyclerAdapter<T, V extends ImageItemEntity<T>> extends RecyclerView.Adapter<RecyclerViewHolder> implements PinnedHeaderNotifyer<T> {
+public abstract class RecyclerAdapter<T, V extends RecycleItemEntity<T>> extends RecyclerView.Adapter<RecyclerViewHolder> implements PinnedHeaderNotifyer<T> {
 
     public final static int TYPE_DATA = 1;
     public final static int TYPE_SECTION = 2;

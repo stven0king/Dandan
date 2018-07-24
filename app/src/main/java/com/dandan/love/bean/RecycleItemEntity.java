@@ -6,13 +6,13 @@ import com.dandan.love.base.BaseRecycleAdapter;
 /**
  * Created by Tanzhenxing
  * Date: 2018/7/11 下午10:07
- * Description: recycle图片model
+ * Description: recycle的base entity
  */
-public class ImageItemEntity<T> implements MultiItemEntity {
+public class RecycleItemEntity<T> implements MultiItemEntity {
 
     private T data;
 
-    public ImageItemEntity(T data) {
+    public RecycleItemEntity(T data) {
         this.data = data;
     }
 
