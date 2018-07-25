@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.dandan.love.R;
 import com.dandan.love.base.BaseActivity;
@@ -25,6 +26,12 @@ public class BaseWebViewActivity extends BaseActivity{
         setContentView(R.layout.activity_base_webview_layout);
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         url = getIntent().getStringExtra("url");
         webView = findViewById(R.id.webview);
         webView.loadUrl(url);

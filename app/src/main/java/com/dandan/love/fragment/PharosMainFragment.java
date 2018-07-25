@@ -46,7 +46,7 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
     private List<RecycleItemEntity<GankIOClassifyModel>> listData = new ArrayList<>();
     private BaseRecycleAdapter<RecycleItemEntity<GankIOClassifyModel>> mAdapter;
 
-    private int pagetName = 0;
+    private int pagetName = 1;
 
     public PharosMainFragment(MainActivity activity) {
         this.activity = activity;
@@ -114,12 +114,14 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
 
     @Override
     protected void lazyLoad() {
+        Logger.d(TAG, "lazyLoad: ");
 
     }
 
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh: ");
+        pagetName = 1;
         initGankioEvent();
 
     }
@@ -157,6 +159,9 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
                 .subscribe(new SimpleSubscriber<ArrayList<GankIOClassifyModel>>() {
                     @Override
                     public void onNext(ArrayList<GankIOClassifyModel> list) {
+                        if (pagetName == 1) {
+                            listData.clear();
+                        }
                         if (null != list && list.size() > 0) {
                             for (GankIOClassifyModel model:list) {
                                 listData.add(new RecycleItemEntity<>(model));

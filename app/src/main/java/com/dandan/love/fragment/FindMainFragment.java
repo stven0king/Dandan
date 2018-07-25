@@ -111,7 +111,6 @@ public class FindMainFragment extends BaseLazyFragment{
             public void onItemClick(BaseQuickAdapter adapter, View view, int i) {
                 final RecycleItemEntity<FindImageModel> entity = mAdapter.getData().get(i);
                 new ImagePreviewFragment(getActivity().getSupportFragmentManager()).open().show(entity.getData().getSourceUrl());
-                //BaseWebViewActivity.startActivituy(getActivity(), entity.getData().getBigPicUrl());
             }
         });
     }
