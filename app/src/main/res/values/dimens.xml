@@ -4,4 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="bottom_navigationview_height">56dp</dimen>
+    <dimen name="div">1dp</dimen>
+    <dimen name="div_thin">0.5dp</dimen>
+
 </resources>

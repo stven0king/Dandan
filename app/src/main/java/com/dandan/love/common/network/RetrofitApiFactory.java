@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.dandan.love.common.logger.core.Logger;
+import com.dandan.love.common.network.bean.Wrapper;
 import com.dandan.love.common.network.bean.YYWrapper;
 import com.dandan.love.common.network.converter.ByteArrayConverterFactory;
 import com.dandan.love.common.network.converter.Host;
@@ -44,6 +45,7 @@ public class RetrofitApiFactory {
     private static Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
     private static Gson gson = new GsonBuilder()
             .registerTypeAdapter(YYWrapper.class, new YYWrapper.JsonAdapter())
+            .registerTypeAdapter(Wrapper.class, new Wrapper.JsonAdapter())
             .create();
     static{
         /*

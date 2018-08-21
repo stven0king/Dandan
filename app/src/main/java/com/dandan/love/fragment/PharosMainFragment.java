@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
     private List<RecycleItemEntity<GankIOClassifyModel>> listData = new ArrayList<>();
     private BaseRecycleAdapter<RecycleItemEntity<GankIOClassifyModel>> mAdapter;
 
-    private int pagetName = 1;
+    private int pageName = 1;
 
     public PharosMainFragment(MainActivity activity) {
         this.activity = activity;
@@ -121,7 +120,7 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh: ");
-        pagetName = 1;
+        pageName = 1;
         initGankioEvent();
 
     }
@@ -155,18 +154,18 @@ public class PharosMainFragment extends BaseLazyFragment implements SwipeRefresh
     }
 
     private void initGankioEvent() {
-        Subscription s = submitForObservable(new GankDataGetListTask(GankDataGetListTask.CLASSIFY_TYPE[1], pagetName))
+        Subscription s = submitForObservable(new GankDataGetListTask(GankDataGetListTask.CLASSIFY_TYPE[1], pageName))
                 .subscribe(new SimpleSubscriber<ArrayList<GankIOClassifyModel>>() {
                     @Override
                     public void onNext(ArrayList<GankIOClassifyModel> list) {
-                        if (pagetName == 1) {
+                        if (pageName == 1) {
                             listData.clear();
                         }
                         if (null != list && list.size() > 0) {
                             for (GankIOClassifyModel model:list) {
                                 listData.add(new RecycleItemEntity<>(model));
                             }
-                            pagetName++;
+                            pageName++;
                             mAdapter.notifyDataSetChanged();
                             completeRefreshData();
                         }

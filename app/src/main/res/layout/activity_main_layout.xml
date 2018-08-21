@@ -24,6 +24,12 @@
         app:itemBackground="@drawable/tab_item_background"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/div_thin"
+        android:background="@color/border"
+        app:layout_constraintTop_toTopOf="@id/main_navigation_view"/>
+
     <FrameLayout
         android:id="@+id/fragments_layout"
         android:layout_width="match_parent"

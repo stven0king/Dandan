@@ -81,7 +81,9 @@ public class FindMainFragment extends BaseLazyFragment{
     }
 
     private void initView() {
-        mDisplayWidth = DensityUtil.gettDisplayHeight(App.getApp());
+        mDisplayWidth = DensityUtil.gettDisplayWidth(App.getApp());
+        final int widht = (mDisplayWidth - 100) / 2;
+        final int height = (int) (widht * 0.618 / 0.382);
         mAdapter = new BaseRecycleAdapter<RecycleItemEntity<FindImageModel>>(data) {
             @Override
             protected void addItemTypes() {
@@ -97,8 +99,8 @@ public class FindMainFragment extends BaseLazyFragment{
                         holder.setText(R.id.tv_pos, TextUtils.isEmpty(model.getDesc()) ? "" : model.getDesc());
                         ImageView imageView = holder.getView(R.id.iv_animal);
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) imageView.getLayoutParams();
-                        params.width = (mDisplayWidth - 100) / 2;
-                        params.height = (position % 3 == 0) ? 500 : 660;
+                        params.width = widht;
+                        params.height = height;
                         imageView.setLayoutParams(params);
                         GlideApp.with(getActivity()).load(model.getSmallPicUrl()).into(imageView);
                         break;
