@@ -26,8 +26,14 @@ public class RecycleItemEntity<T> implements MultiItemEntity {
     }
 
 
+    int currentType = BaseRecycleAdapter.TYPE_DATA;
+
+    public void setCurrentType(int currentType) {
+        this.currentType = currentType;
+    }
+
     @Override
     public int getItemType() {
-        return BaseRecycleAdapter.TYPE_DATA;
+        return currentType;
     }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+    <View
+        android:id="@+id/ziliao_line"
+        android:layout_width="2dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimaryDark"/>
+    <TextView
+        android:id="@+id/ziliao_title"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_toRightOf="@id/ziliao_line"
+        android:layout_alignTop="@id/line"
+        android:layout_alignBottom="@id/line"
+        android:gravity="center_vertical"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="家庭成员" />
+
+    <TextView
+        android:id="@+id/user_ziliao"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/ziliao_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="1.2"
+        android:textColor="@color/gray_8f"
+        android:textSize="16dp"
+        android:text=""/>
+</RelativeLayout>

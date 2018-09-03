@@ -17,6 +17,7 @@ import java.util.List;
  */
 public abstract class BaseRecycleAdapter<T extends MultiItemEntity> extends BaseMultiItemQuickAdapter<T, BaseViewHolder> {
     public static final int TYPE_DATA = 0;
+    public static final int TYPE_HEADER = 1;
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.

@@ -74,23 +74,4 @@ public class AuthorModel implements Serializable{
     public void setChaodai(String chaodai) {
         this.chaodai = chaodai;
     }
-
-    public static AuthorModel parse(JSONObject jsonObject) {
-        AuthorModel authorModel = null;
-        if (null != jsonObject) {
-            try {
-                authorModel = new AuthorModel();
-                authorModel.authorid = jsonObject.optString("authorid");
-                authorModel.count = jsonObject.optInt("count");
-                authorModel.icon = jsonObject.optString("icon");
-                authorModel.intro = jsonObject.optString("intro");
-                authorModel.name = jsonObject.optString("name");
-                authorModel.chaodai = jsonObject.optString("chaodai");
-                authorModel.id = jsonObject.optInt("id");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return authorModel;
-    }
 }

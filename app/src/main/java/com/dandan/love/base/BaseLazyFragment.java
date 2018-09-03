@@ -1,6 +1,8 @@
 package com.dandan.love.base;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.dandan.love.common.logger.core.Logger;
 
@@ -10,6 +12,7 @@ import com.dandan.love.common.logger.core.Logger;
  * Description:
  */
 public abstract class BaseLazyFragment extends BaseFragment{
+    protected Context mContext;
     protected boolean isVisible;
     protected boolean isPrepared;
     protected boolean mHasLoadedOnce;
@@ -19,6 +22,7 @@ public abstract class BaseLazyFragment extends BaseFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.mContext = getActivity();
         isLoad = false;
     }
 

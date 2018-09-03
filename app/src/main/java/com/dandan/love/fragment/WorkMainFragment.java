@@ -17,16 +17,17 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dandan.love.R;
+import com.dandan.love.Router;
 import com.dandan.love.activity.MainActivity;
 import com.dandan.love.base.BaseLazyFragment;
 import com.dandan.love.base.BaseRecycleAdapter;
 import com.dandan.love.bean.AuthorModel;
 import com.dandan.love.bean.RecycleItemEntity;
+import com.dandan.love.common.image.GlideCircleTransform;
 import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.GSCAuthroPopularListTask;
 import com.dandan.love.common.view.NetWorkErrorLayout;
-import com.dandan.love.config.Config;
 import com.dandan.love.config.GlideApp;
 
 import java.util.ArrayList;
@@ -89,7 +90,8 @@ public class WorkMainFragment extends BaseLazyFragment implements SwipeRefreshLa
                     holder.setText(R.id.user_name, model.getName());
                     if (!TextUtils.isEmpty(model.getIcon())) {
                         GlideApp.with(getActivity())
-                                .load(Config.GUSHICI_IMAGE_URL + model.getIcon())
+                                .load(model.getIcon())
+                                .transform(new GlideCircleTransform(getActivity()))
                                 .into(imageView);
                     } else {
 
@@ -102,6 +104,8 @@ public class WorkMainFragment extends BaseLazyFragment implements SwipeRefreshLa
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addOnScrollListener(scrollListener);
         recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((adapter, view1, position) ->
+                Router.startAuthorDetailActicvity(mContext, listData.get(position).getData()));
         initData();
         return view;
     }

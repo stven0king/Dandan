@@ -7,4 +7,6 @@
     <dimen name="div">1dp</dimen>
     <dimen name="div_thin">0.5dp</dimen>
 
+    <dimen name="author_icon_item">60dp</dimen>
+    <dimen name="author_icon_detail">90dp</dimen>
 </resources>

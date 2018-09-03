@@ -16,38 +16,54 @@
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/cardview_light_background"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="8dp"
-    app:cardMaxElevation="6dp"
-    app:cardPreventCornerOverlap="true"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="true"
     app:contentPaddingLeft="5dp"
     app:contentPaddingRight="5dp"
     app:contentPaddingBottom="5dp">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="5dp">
         <ImageView
             android:id="@+id/user_icon"
-            android:layout_width="35dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_centerVertical="true"/>
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:layout_toRightOf="@id/user_icon"
-            android:text="李白"
-            android:textColor="@color/gray_8f"/>
-
+            android:layout_width="@dimen/author_icon_item"
+            android:layout_height="@dimen/author_icon_item"
+            android:layout_marginRight="12dp"
+            android:scaleType="centerCrop"
+            android:padding="0.5dp"
+            android:background="@drawable/user_icon_bg"
+            android:layout_marginBottom="6dp"/>
         <TextView
             android:id="@+id/user_chaodai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/user_name"
-            android:text="李白"
+            android:layout_below="@id/user_icon"
+            android:text="朝代"
+            android:textSize="12dp"
+            android:textColor="@color/gray_8f"/>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/user_chaodai"
+            android:layout_alignBottom="@id/user_chaodai"
+            android:layout_toRightOf="@id/user_chaodai"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@color/gray_8f"/>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_icon"
+            android:layout_toRightOf="@id/line"
+            android:text="名称"
+            android:textSize="12dp"
             android:textColor="@color/gray_8f"/>
 
         <TextView
@@ -55,9 +71,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/user_icon"
-            android:layout_below="@id/user_name"
             android:maxLines="3"
+            android:lineSpacingMultiplier="1.2"
             android:textColor="@color/gray_8f"
+            android:textSize="16dp"
             android:text="肯定是减肥开始减肥开始交电费款圣诞节疯狂手机端开发接口圣诞节疯狂圣诞节疯狂圣诞节疯狂绝对是开放接口圣诞节疯狂圣诞节疯狂时代峻峰款圣诞节疯狂手机端开发接口圣诞节疯狂圣诞节疯狂圣诞节疯狂绝对是开放接口圣诞节疯狂圣诞节疯狂时代峻峰"/>
     </RelativeLayout>
 

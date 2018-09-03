@@ -125,7 +125,7 @@ public class FindMainFragment extends BaseLazyFragment{
 
     private void initdata() {
         initGankioEvent();
-        initBaiduImageEvent();
+        //initBaiduImageEvent();
     }
 
     private void initGankioEvent() {

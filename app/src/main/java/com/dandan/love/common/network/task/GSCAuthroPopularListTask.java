@@ -4,6 +4,8 @@ import com.dandan.love.bean.AuthorModel;
 import com.dandan.love.common.network.RetrofitTask;
 import com.dandan.love.common.network.bean.ErrorResult;
 import com.dandan.love.common.network.bean.Wrapper;
+import com.dandan.love.config.Config;
+import com.dandan.love.utils.GsonUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,25 +36,24 @@ public class GSCAuthroPopularListTask extends RetrofitTask<List<AuthorModel>>{
     public Observable<List<AuthorModel>> exeForObservable() {
         return gushiciApi.getPopularAuthor(pageName, pageSize)
                 .subscribeOn(Schedulers.io())
-                .map(new Func1<Wrapper, List<AuthorModel>>() {
-                    @Override
-                    public List<AuthorModel> call(Wrapper wrapper) {
-                        if (Wrapper.SUCCESS_CODE == wrapper.code) {
-                            JSONArray jsonArray = (JSONArray) wrapper.result;
-                            if (null != jsonArray) {
-                                List<AuthorModel> list = new ArrayList<>();
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    try {
-                                        list.add(AuthorModel.parse(jsonArray.getJSONObject(i)));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                .map(wrapper -> {
+                    if (Wrapper.SUCCESS_CODE == wrapper.code) {
+                        JSONArray jsonArray = (JSONArray) wrapper.result;
+                        if (null != jsonArray) {
+                            List<AuthorModel> list = new ArrayList<>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                try {
+                                    AuthorModel authorModel = GsonUtils.fromJson(jsonArray.getJSONObject(i).toString(), AuthorModel.class);
+                                    authorModel.setIcon(Config.GUSHICI_IMAGE_URL + authorModel.getIcon());
+                                    list.add(authorModel);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                                return list;
                             }
+                            return list;
                         }
-                        throw new ErrorResult(wrapper.code, wrapper.msg);
                     }
+                    throw new ErrorResult(wrapper.code, wrapper.msg);
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
