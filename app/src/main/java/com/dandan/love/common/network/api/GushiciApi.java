@@ -38,4 +38,14 @@ public interface GushiciApi {
      */
     @GET(RetrofitInterfaceConfig.GUSHICI_AUTHOR_DETAIL)
     Observable<Wrapper> getAuthorDetail(@Query("name") String name);
+
+    /**
+     * 或者诗人诗集
+     * @param name
+     * @return
+     */
+    @GET(RetrofitInterfaceConfig.GUSHICI_LIST_BY_AUTHOR)
+    Observable<Wrapper> getGushiwenListByAuthor(@Query("aname") String name,
+                                        @Query("p") int p,
+                                        @Query("s") int s);
 }

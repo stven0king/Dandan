@@ -24,6 +24,7 @@ import com.dandan.love.base.BaseRecycleAdapter;
 import com.dandan.love.bean.AuthorModel;
 import com.dandan.love.bean.RecycleItemEntity;
 import com.dandan.love.common.image.GlideCircleTransform;
+import com.dandan.love.common.image.ImageLoader;
 import com.dandan.love.common.logger.core.Logger;
 import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.GSCAuthroPopularListTask;
@@ -89,10 +90,7 @@ public class WorkMainFragment extends BaseLazyFragment implements SwipeRefreshLa
                     holder.setText(R.id.user_chaodai, model.getChaodai());
                     holder.setText(R.id.user_name, model.getName());
                     if (!TextUtils.isEmpty(model.getIcon())) {
-                        GlideApp.with(getActivity())
-                                .load(model.getIcon())
-                                .transform(new GlideCircleTransform(getActivity()))
-                                .into(imageView);
+                        ImageLoader.loadImageCircleIcon(model.getIcon(), imageView);
                     } else {
 
                     }

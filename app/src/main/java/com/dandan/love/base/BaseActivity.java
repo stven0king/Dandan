@@ -64,17 +64,4 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             this.mCompositeSubscription = null;
         }
     }
-
-    protected void loadImage(ImageView imageView, String url) {
-        GlideApp.with(this)
-                .load(url)
-                .into(imageView);
-    }
-
-    protected void loadCircleImage(ImageView imageView, String url) {
-        GlideApp.with(this)
-                .load(url)
-                .transform(new GlideCircleTransform(this))
-                .into(imageView);
-    }
 }

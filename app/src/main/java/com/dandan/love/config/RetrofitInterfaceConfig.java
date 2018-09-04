@@ -26,4 +26,6 @@ public class RetrofitInterfaceConfig {
 
     public final static String GUSHICI_AUTHOR_POPULAR = "author/popular";
     public final static String GUSHICI_AUTHOR_DETAIL = "author/detail";
+
+    public final static String GUSHICI_LIST_BY_AUTHOR = "gsw/listbyauthor";
 }

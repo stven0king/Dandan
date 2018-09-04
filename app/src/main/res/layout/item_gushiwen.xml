@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+        CardView_cardBackgroundColor 设置背景色
+        CardView_cardCornerRadius 设置圆角大小
+        CardView_cardElevation 设置z轴阴影
+        CardView_cardMaxElevation 设置z轴最大高度值
+        CardView_cardUseCompatPadding 是否使用CompadPadding
+        CardView_cardPreventCornerOverlap 是否使用PreventCornerOverlap
+        CardView_contentPadding 内容的padding
+    -->
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/cardview_light_background"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    app:contentPaddingLeft="5dp"
+    app:contentPaddingRight="5dp"
+    app:contentPaddingBottom="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/gsw_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:text="李白"/>
+        <LinearLayout
+            android:id="@+id/user_layout"
+            android:layout_below="@id/gsw_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/user_chaodai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="唐代"/>
+            <View
+                android:layout_width="3dp"
+                android:layout_height="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/cricle_blue_bg"/>
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="李白"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/gsw_content"
+            android:layout_below="@id/user_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="4"
+            android:textSize="16dp"
+            android:textColor="@color/gray_8f"
+            android:text="床前明月光，疑是地上霜。
+举头望明月，低头思故乡"/>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

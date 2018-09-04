@@ -25,6 +25,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.AuthorZiliaoDetailActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.AuthorGushiwenListActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

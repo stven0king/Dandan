@@ -19,6 +19,7 @@ import com.dandan.love.bean.AuthorModel;
 import com.dandan.love.bean.AuthorZiliaoModel;
 import com.dandan.love.bean.AuthorZiliaoOptModel;
 import com.dandan.love.bean.RecycleItemEntity;
+import com.dandan.love.common.image.ImageLoader;
 import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.GSCAuthorDetailTask;
 
@@ -71,12 +72,14 @@ public class AuthorDetailActivity extends BaseActivity{
     }
 
     private void initData() {
-        loadCircleImage(userIconIV, authorModel.getIcon());
+        ImageLoader.loadImageCircleIcon(authorModel.getIcon(), userIconIV);
         userInfoTV.setText(Html.fromHtml(authorModel.getIntro()));
         userChaidaiTV.setText(authorModel.getChaodai());
         userNameTV.setText(authorModel.getName());
         userCountTV.setText(authorModel.getCount() + "篇");
-        userCountTV.setOnClickListener(this);
+        userCountTV.setOnClickListener(v -> {
+            Router.startAuthorGushiwenListActivity(mContext, authorModel.getName());
+        });
         linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
