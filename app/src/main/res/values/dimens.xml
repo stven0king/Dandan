@@ -9,4 +9,7 @@
 
     <dimen name="author_icon_item">60dp</dimen>
     <dimen name="author_icon_detail">90dp</dimen>
+
+    <dimen name="detail_page_text_size">14dp</dimen>
+    <dimen name="detail_list_text_size">14dp</dimen>
 </resources>

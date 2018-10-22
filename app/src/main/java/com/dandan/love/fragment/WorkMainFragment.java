@@ -30,6 +30,8 @@ import com.dandan.love.common.network.SimpleSubscriber;
 import com.dandan.love.common.network.task.GSCAuthroPopularListTask;
 import com.dandan.love.common.view.NetWorkErrorLayout;
 import com.dandan.love.config.GlideApp;
+import com.dandan.love.utils.DensityUtil;
+import com.dandan.love.view.viewholder.decoration.RecycleViewLinearDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,9 +101,12 @@ public class WorkMainFragment extends BaseLazyFragment implements SwipeRefreshLa
                 }
             }
         };
+
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addOnScrollListener(scrollListener);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.addItemDecoration(new RecycleViewLinearDivider(mContext, LinearLayoutManager.VERTICAL,
+                R.drawable.recycleview_divider_line_bg));
         mAdapter.setOnItemClickListener((adapter, view1, position) ->
                 Router.startAuthorDetailActicvity(mContext, listData.get(position).getData()));
         initData();

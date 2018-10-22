@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.dandan.love.activity.AuthorDetailActivity;
 import com.dandan.love.activity.AuthorGushiwenListActivity;
 import com.dandan.love.activity.AuthorZiliaoDetailActivity;
+import com.dandan.love.activity.AuthorZiliaoDrawerlayoutActivity;
 import com.dandan.love.activity.GushiwenListActivity;
 import com.dandan.love.bean.AuthorModel;
 import com.dandan.love.bean.AuthorZiliaoOptModel;
@@ -26,6 +27,13 @@ public class Router {
     public static void startAuthorZiliaoDetailActivity(Context context, @NonNull AuthorZiliaoOptModel authorZiliaoOptModel) {
         Intent intent = new Intent(context, AuthorZiliaoDetailActivity.class);
         intent.putExtra(AuthorZiliaoDetailActivity.DATA, authorZiliaoOptModel);
+        context.startActivity(intent);
+    }
+
+    public static void startAuthorZiliaoDrawerLayoutActivity(Context context, @NonNull AuthorZiliaoOptModel authorZiliaoOptModel, AuthorModel authorModel) {
+        Intent intent = new Intent(context, AuthorZiliaoDrawerlayoutActivity.class);
+        intent.putExtra(AuthorZiliaoDrawerlayoutActivity.DATA, authorZiliaoOptModel);
+        intent.putExtra(AuthorZiliaoDrawerlayoutActivity.AUTHOR_INFO, authorModel);
         context.startActivity(intent);
     }
 

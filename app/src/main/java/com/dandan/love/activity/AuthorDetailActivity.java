@@ -2,6 +2,7 @@ package com.dandan.love.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +32,7 @@ import rx.Subscription;
 /**
  * Created by Tanzhenxing
  * Date: 2018/8/29 上午10:03
- * Description:
+ * Description: 诗人详情页
  */
 public class AuthorDetailActivity extends BaseActivity{
     private ImageView userIconIV;
@@ -39,6 +40,7 @@ public class AuthorDetailActivity extends BaseActivity{
     private RecyclerView recyclerView;
     private BaseRecycleAdapter<RecycleItemEntity<AuthorZiliaoOptModel>> mAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private GridLayoutManager gridLayoutManager;
     private Toolbar toolbar;
     private AuthorModel authorModel;
     private List<RecycleItemEntity<AuthorZiliaoOptModel>> listData = new ArrayList<>();
@@ -80,17 +82,17 @@ public class AuthorDetailActivity extends BaseActivity{
         userCountTV.setOnClickListener(v -> {
             Router.startAuthorGushiwenListActivity(mContext, authorModel.getName());
         });
-        linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false) {
+        gridLayoutManager = new GridLayoutManager(mContext, 3){
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         };
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(gridLayoutManager);
         mAdapter = new BaseRecycleAdapter<RecycleItemEntity<AuthorZiliaoOptModel>>(listData) {
             @Override
             protected void addItemTypes() {
-                addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_author_detail);
+                addItemType(BaseRecycleAdapter.TYPE_DATA, R.layout.item_grid_author_detail);
             }
 
             @Override
@@ -98,21 +100,24 @@ public class AuthorDetailActivity extends BaseActivity{
                 int currentType = holder.getItemViewType();
                 if (BaseRecycleAdapter.TYPE_DATA == currentType) {
                     AuthorZiliaoOptModel model = item.getData();
-                    holder.setText(R.id.ziliao_title, item.getData().getTitle());
-                    TextView ziliao = holder.getView(R.id.user_ziliao);
-                    StringBuilder builder = new StringBuilder();
-                    for (int i = 0; i < model.getAuthorZiliaoModels().size(); i++) {
-                        builder.append("●").append(model.getAuthorZiliaoModels().get(i).getTitle());
-                        if (i + 1 != model.getAuthorZiliaoModels().size()) {
-                            builder.append("\n");
-                        }
-                    }
-                    ziliao.setText(builder.toString());
+                    holder.setText(R.id.ziliao_title, model.getTitle());
+                    //TextView ziliao = holder.getView(R.id.user_ziliao);
+                    //StringBuilder builder = new StringBuilder();
+                    //for (int i = 0; i < model.getAuthorZiliaoModels().size(); i++) {
+                    //    builder.append("●").append(model.getAuthorZiliaoModels().get(i).getTitle());
+                    //    if (i + 1 != model.getAuthorZiliaoModels().size()) {
+                    //        builder.append("\n");
+                    //    }
+                    //}
+                    //ziliao.setText(builder.toString());
                 }
             }
         };
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener((adapter, view, position) -> Router.startAuthorZiliaoDetailActivity(mContext, listData.get(position).getData()));
+        mAdapter.setOnItemClickListener((adapter, view, position) -> Router.
+                startAuthorZiliaoDrawerLayoutActivity(mContext,
+                        listData.get(position).getData(),
+                        authorModel));
 
     }
 
